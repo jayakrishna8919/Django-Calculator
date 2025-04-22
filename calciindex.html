@@ -1,33 +1,32 @@
-from django.shortcuts import render
-from django.http import HttpResponse
-# Create your views here.
-def main(request):
-    context={}
-    return render(request,'calciindex.html',context)
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Django calculator</title>
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+</head>
+<body>
+    <h1>Django calculator</h1>
+    <form action="{% url 'calculate' %}" method="post">
+        {% csrf_token %}
+        <label for="Number one">First number</label>
+        <input type="number" name="number_one" placeholder="First Number">
 
-def calculate(request):
-    if request.method=='POST':
-        number_one = request.POST.get("number_one")
-        number_two = request.POST.get("number_two")
-        operation = request.POST.get("operation")
-    if operation == 'add':
-        result = float(number_one)+float(number_two)
-        context = {'result':result}
-        return render(request,'calciindex.html',context)
-    elif operation == 'sub':
-        result = float(number_one)-float(number_two)
-        context = {'result':result}
-        return render(request,'calciindex.html',context)
-    elif operation == 'mul':
-        result = float(number_one)*float(number_two)
-        context = {'result':result}
-        return render(request,'calciindex.html',context)
-    elif operation == 'div':
-        try:
-            result = float(number_one)/float(number_two)
-            context = {'result':result}
-            return render(request,'calciindex.html',context)
-        except ZeroDivisionError as error:
-            return render(request,'calciindex.html',{'result':error})
-    else:
-        return render(request,'calciindex.html')
+        <label for="Number two">Second number</label>
+        <input type="number" name="number_two" placeholder="Second Number">
+
+        <label for="operation">Operation</label>
+        <select name="operation">
+            <option value="add">Add</option>
+            <option value="sub">Subtract</option>
+            <option value="mul">Multiply</option>
+            <option value="div">Divide</option>
+        </select>
+
+        <input type="submit" value="calculate" id="calc_btn" class="btn">
+        <h3>The result is :{{ result }}</h3>
+    </form>
+</body>
+</html>
